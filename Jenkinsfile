@@ -24,7 +24,7 @@ pipeline {
             parallel {
                 stage('Prod A') {
                     agent {
-                        label "docker"
+                        label "housekeeping"
                     }
                     steps {
                         script {
@@ -34,7 +34,7 @@ pipeline {
                 }
                 stage('Prod B') {
                     agent {
-                        label "docker"
+                        label "housekeeping"
                     }
                     steps {
                         script {
@@ -51,7 +51,7 @@ pipeline {
             parallel {
                 stage('Prod A') {
                     agent {
-                        label "docker"
+                        label "housekeeping"
                     }
                     steps {
                         script {
@@ -61,7 +61,7 @@ pipeline {
                 }
                 stage('Prod B') {
                     agent {
-                        label "docker"
+                        label "housekeeping"
                     }
                     steps {
                         script {
@@ -78,7 +78,7 @@ pipeline {
             parallel {
                 stage('Prod A') {
                     agent {
-                        label "docker"
+                        label "housekeeping"
                     }
                     steps {
                         script {
@@ -88,7 +88,7 @@ pipeline {
                 }
                 stage('Prod B') {
                     agent {
-                        label "docker"
+                        label "housekeeping"
                     }
                     steps {
                         script {
