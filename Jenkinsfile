@@ -29,7 +29,7 @@ pipeline {
                     }
                     steps {
                         script {
-                            echo "Building A (TimeStamp: ${currentBuild.startTimeInMillis})" | tee Artifact-A
+                            sh "echo \"Building A (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-A"
                         }
                     }
                 }
@@ -39,7 +39,7 @@ pipeline {
                     }
                     steps {
                         script {
-                            echo "Building B (TimeStamp: ${currentBuild.startTimeInMillis})" | tee Artifact-B
+                            sh "echo \"Building B (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-B"
                         }
                     }
                 }
@@ -56,7 +56,7 @@ pipeline {
                     }
                     steps {
                         script {
-                            echo "Building A (TimeStamp: ${currentBuild.startTimeInMillis})" | tee Artifact-A
+                            sh "echo \"Building A (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-A"
                             uploadArtifactToGitHub("Artifact-A", "latest")
                         }
                     }
@@ -67,7 +67,7 @@ pipeline {
                     }
                     steps {
                         script {
-                            echo "Building B (TimeStamp: ${currentBuild.startTimeInMillis})" | tee Artifact-B
+                            sh "echo \"Building B (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-B"
                             uploadArtifactToGitHub("Artifact-B", "latest")
                         }
                     }
@@ -85,7 +85,7 @@ pipeline {
                     }
                     steps {
                         script {
-                            echo "Building A (TimeStamp: ${currentBuild.startTimeInMillis})" | tee Artifact-A
+                            sh "echo \"Building A (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-A"
                             uploadArtifactToGitHub("Artifact-A", "latest")
                         }
                     }
@@ -96,7 +96,7 @@ pipeline {
                     }
                     steps {
                         script {
-                            echo "Building B (TimeStamp: ${currentBuild.startTimeInMillis})" | tee Artifact-B
+                            sh "echo \"Building B (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-B"
                             uploadArtifactToGitHub("Artifact-B", "latest")
                         }
                     }
