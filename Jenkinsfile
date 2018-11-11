@@ -13,6 +13,7 @@ pipeline {
         BRANCH_TO_DEPLOY = 'xyz'
         // This version will be used for the image tags if the branch is merged to master
         BUILDER_IMAGE_VERSION = '1.2'
+        GITHUB_TOKEN = credentials('cdc81429-53c7-4521-81e9-83a7992bca76')
     }
     stages {
         stage('Feature-Branch') {
@@ -28,7 +29,7 @@ pipeline {
                     }
                     steps {
                         script {
-                            echo "Building A"
+                            echo "Building A (TimeStamp: ${currentBuild.startTimeInMillis})" | tee Artifact-A
                         }
                     }
                 }
@@ -38,7 +39,7 @@ pipeline {
                     }
                     steps {
                         script {
-                            echo "Building B"
+                            echo "Building B (TimeStamp: ${currentBuild.startTimeInMillis})" | tee Artifact-B
                         }
                     }
                 }
@@ -55,7 +56,8 @@ pipeline {
                     }
                     steps {
                         script {
-                            echo "Building A"
+                            echo "Building A (TimeStamp: ${currentBuild.startTimeInMillis})" | tee Artifact-A
+                            uploadArtifactToGitHub("Artifact-A", "latest")
                         }
                     }
                 }
@@ -65,7 +67,8 @@ pipeline {
                     }
                     steps {
                         script {
-                            echo "Building B"
+                            echo "Building B (TimeStamp: ${currentBuild.startTimeInMillis})" | tee Artifact-B
+                            uploadArtifactToGitHub("Artifact-B", "latest")
                         }
                     }
                 }
@@ -82,7 +85,8 @@ pipeline {
                     }
                     steps {
                         script {
-                            echo "Building A"
+                            echo "Building A (TimeStamp: ${currentBuild.startTimeInMillis})" | tee Artifact-A
+                            uploadArtifactToGitHub("Artifact-A", "latest")
                         }
                     }
                 }
@@ -92,11 +96,28 @@ pipeline {
                     }
                     steps {
                         script {
-                            echo "Building B"
+                            echo "Building B (TimeStamp: ${currentBuild.startTimeInMillis})" | tee Artifact-B
+                            uploadArtifactToGitHub("Artifact-B", "latest")
                         }
                     }
                 }
             }
         }
     }
+}
+
+def uploadArtifactToGitHub(String artifact, String version) {
+    sh "docker run \\\n" +
+            "--rm \\\n" +
+            "-e GITHUB_TOKEN=${GITHUB_TOKEN} \\\n" +
+            "-v ${WORKSPACE}:/filesToUpload \\\n" +
+            "spectreproject/github-uploader:latest \\\n" +
+            "github-release upload \\\n" +
+            "    --user HLXEasy \\\n" +
+            "    --repo release-experiments \\\n" +
+            "    --tag ${version} \\\n" +
+            "    --name \"${artifact}\" \\\n" +
+            "    --file /filesToUpload/${artifact} \\\n" +
+            "    --replace"
+    sh "rm -f ${artifact}"
 }
