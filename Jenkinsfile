@@ -55,7 +55,7 @@ pipeline {
                         label "housekeeping"
                     }
                     stages {
-                        stage('') {
+                        stage('Tag exists') {
                             when {
                                 isTagExisting(
                                         user: 'HLXEasy',
@@ -68,7 +68,7 @@ pipeline {
                                 }
                             }
                         }
-                        stage(''){
+                        stage('Create tag'){
                             when {
                                 not {
                                     isTagExisting(
@@ -83,7 +83,7 @@ pipeline {
                                 }
                             }
                         }
-                        stage('') {
+                        stage('Build') {
                             steps {
                                 script {
                                     sh "echo \"Building A (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-A"
