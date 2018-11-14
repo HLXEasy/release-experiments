@@ -57,7 +57,11 @@ pipeline {
                     steps {
                         script {
                             sh "echo \"Building A (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-A"
-                            uploadArtifactToGitHub("Artifact-A", "latest")
+                            uploadArtifactToGitHub(
+                                    user: 'HLXEasy',
+                                    repository: 'release-experiments',
+                                    artifactNameRemote: 'Artifact-A',
+                            )
                         }
                     }
                 }
@@ -68,7 +72,11 @@ pipeline {
                     steps {
                         script {
                             sh "echo \"Building B (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-B"
-                            uploadArtifactToGitHub("Artifact-B", "latest")
+                            uploadArtifactToGitHub(
+                                    user: 'HLXEasy',
+                                    repository: 'release-experiments',
+                                    artifactNameRemote: 'Artifact-B',
+                            )
                         }
                     }
                 }
@@ -86,7 +94,13 @@ pipeline {
                     steps {
                         script {
                             sh "echo \"Building A (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-A"
-                            uploadArtifactToGitHub("Artifact-A", "latest")
+                            uploadArtifactToGitHub(
+                                    user: 'HLXEasy',
+                                    repository: 'release-experiments',
+                                    tag: 'latest',
+                                    artifactNameLocal: 'Artifact-A',
+                                    artifactNameRemote: 'Artifact-A',
+                            )
                         }
                     }
                 }
@@ -97,27 +111,17 @@ pipeline {
                     steps {
                         script {
                             sh "echo \"Building B (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-B"
-                            uploadArtifactToGitHub("Artifact-B", "latest")
+                            uploadArtifactToGitHub(
+                                    user: 'HLXEasy',
+                                    repository: 'release-experiments',
+                                    tag: 'latest',
+                                    artifactNameLocal: 'Artifact-B',
+                                    artifactNameRemote: 'Artifact-B',
+                            )
                         }
                     }
                 }
             }
         }
     }
-}
-
-def uploadArtifactToGitHub(String artifact, String version) {
-    sh "docker run \\\n" +
-            "--rm \\\n" +
-            "-e GITHUB_TOKEN=${GITHUB_TOKEN} \\\n" +
-            "-v ${WORKSPACE}:/filesToUpload \\\n" +
-            "spectreproject/github-uploader:latest \\\n" +
-            "github-release upload \\\n" +
-            "    --user HLXEasy \\\n" +
-            "    --repo release-experiments \\\n" +
-            "    --tag ${version} \\\n" +
-            "    --name \"${artifact}\" \\\n" +
-            "    --file /filesToUpload/${artifact} \\\n" +
-            "    --replace"
-    sh "rm -f ${artifact}"
 }
