@@ -1,7 +1,9 @@
 #!groovy
 
 pipeline {
-    agent any
+    agent {
+        label "master"
+    }
     options {
         timestamps()
         timeout(time: 2, unit: 'HOURS')
