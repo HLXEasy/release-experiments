@@ -57,10 +57,10 @@ pipeline {
                         label "housekeeping"
                     }
                     stages {
-                        stage('Remove tag if existing') {
+                        stage('Remove Release if existing') {
                             when {
                                 expression {
-                                    return isTagExisting(
+                                    return isReleaseExisting(
                                             user: 'HLXEasy',
                                             repository: 'release-experiments'
                                     ) ==~ true
@@ -68,18 +68,18 @@ pipeline {
                             }
                             steps {
                                 script {
-                                    sh "echo Tag latest found"
-                                    removeTag(
+                                    sh "echo Release latest found"
+                                    removeRelease(
                                             user: 'HLXEasy',
                                             repository: 'release-experiments'
                                     )
                                 }
                             }
                         }
-                        stage('Create tag'){
+                        stage('Create Release'){
                             when {
                                 expression {
-                                    return isTagExisting(
+                                    return isReleaseExisting(
                                             user: 'HLXEasy',
                                             repository: 'release-experiments'
                                     ) ==~ false
@@ -87,12 +87,12 @@ pipeline {
                             }
                             steps {
                                 script {
-                                    sh "echo Tag latest not found"
-                                    createTag(
+                                    sh "echo Release latest not found"
+                                    createRelease(
                                             user: 'HLXEasy',
                                             repository: 'release-experiments',
-                                            name: "This is the tag name",
-                                            description: "Tag description"
+                                            name: "This is the Release name",
+                                            description: "Release description"
                                     )
                                 }
                             }
@@ -116,10 +116,10 @@ pipeline {
                         label "housekeeping"
                     }
                     stages {
-                        stage('Remove tag if existing') {
+                        stage('Remove Release if existing') {
                             when {
                                 expression {
-                                    return isTagExisting(
+                                    return isReleaseExisting(
                                             user: 'HLXEasy',
                                             repository: 'release-experiments',
                                             tag: 'foo'
@@ -128,8 +128,8 @@ pipeline {
                             }
                             steps {
                                 script {
-                                    sh "echo Tag foo found"
-                                    removeTag(
+                                    sh "echo Release foo found"
+                                    removeRelease(
                                             user: 'HLXEasy',
                                             repository: 'release-experiments',
                                             tag: 'foo'
@@ -137,10 +137,10 @@ pipeline {
                                 }
                             }
                         }
-                        stage('Create tag'){
+                        stage('Create Release'){
                             when {
                                 expression {
-                                    return isTagExisting(
+                                    return isReleaseExisting(
                                             user: 'HLXEasy',
                                             repository: 'release-experiments',
                                             tag: 'foo'
@@ -149,8 +149,8 @@ pipeline {
                             }
                             steps {
                                 script {
-                                    sh "echo Tag foo not found"
-                                    createTag(
+                                    sh "echo Release foo not found"
+                                    createRelease(
                                             user: 'HLXEasy',
                                             repository: 'release-experiments',
                                             tag: 'foo'
