@@ -69,6 +69,10 @@ pipeline {
                             steps {
                                 script {
                                     sh "echo Tag latest found"
+                                    removeTag(
+                                            user: 'HLXEasy',
+                                            repository: 'release-experiments'
+                                    )
                                 }
                             }
                         }
@@ -84,6 +88,10 @@ pipeline {
                             steps {
                                 script {
                                     sh "echo Tag latest not found"
+                                    createTag(
+                                            user: 'HLXEasy',
+                                            repository: 'release-experiments'
+                                    )
                                 }
                             }
                         }
@@ -119,6 +127,11 @@ pipeline {
                             steps {
                                 script {
                                     sh "echo Tag foo found"
+                                    removeTag(
+                                            user: 'HLXEasy',
+                                            repository: 'release-experiments',
+                                            tag: 'foo'
+                                    )
                                 }
                             }
                         }
@@ -135,6 +148,11 @@ pipeline {
                             steps {
                                 script {
                                     sh "echo Tag foo not found"
+                                    createTag(
+                                            user: 'HLXEasy',
+                                            repository: 'release-experiments',
+                                            tag: 'foo'
+                                    )
                                 }
                             }
                         }
