@@ -57,7 +57,7 @@ pipeline {
                         label "housekeeping"
                     }
                     stages {
-                        stage('Tag exists') {
+                        stage('Remove tag if existing') {
                             when {
                                 expression {
                                     return isTagExisting(
@@ -114,7 +114,7 @@ pipeline {
                         label "housekeeping"
                     }
                     stages {
-                        stage('Tag exists') {
+                        stage('Remove tag if existing') {
                             when {
                                 expression {
                                     return isTagExisting(
