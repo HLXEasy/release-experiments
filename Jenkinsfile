@@ -92,9 +92,7 @@ pipeline {
                                     sh "echo Release latest not found"
                                     createRelease(
                                             user: 'HLXEasy',
-                                            repository: 'release-experiments',
-                                            name: "This is the Release name",
-                                            description: "Release description"
+                                            repository: 'release-experiments'
                                     )
                                 }
                             }
@@ -155,7 +153,9 @@ pipeline {
                                     createRelease(
                                             user: 'HLXEasy',
                                             repository: 'release-experiments',
-                                            tag: 'foo'
+                                            tag: 'foo',
+                                            name: "This is the Release name",
+                                            description: "Release description"
                                     )
                                 }
                             }
