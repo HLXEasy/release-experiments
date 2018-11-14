@@ -57,10 +57,12 @@ pipeline {
                     stages {
                         stage('Tag exists') {
                             when {
-                                isTagExisting(
-                                        user: 'HLXEasy',
-                                        repository: 'release-experiments'
-                                )
+                                expression {
+                                    isTagExisting(
+                                            user: 'HLXEasy',
+                                            repository: 'release-experiments'
+                                    ) == '0'
+                                }
                             }
                             steps {
                                 script {
@@ -71,10 +73,12 @@ pipeline {
                         stage('Create tag'){
                             when {
                                 not {
-                                    isTagExisting(
-                                            user: 'HLXEasy',
-                                            repository: 'release-experiments'
-                                    )
+                                    expression {
+                                        isTagExisting(
+                                                user: 'HLXEasy',
+                                                repository: 'release-experiments'
+                                        ) == '0'
+                                    }
                                 }
                             }
                             steps {
