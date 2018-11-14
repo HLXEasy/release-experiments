@@ -22,6 +22,7 @@ pipeline {
                     anyOf { branch 'develop'; branch 'master'; branch "${BRANCH_TO_DEPLOY}" }
                 }
             }
+            //noinspection GroovyAssignabilityCheck
             parallel {
                 stage('Prod A') {
                     agent {
@@ -49,6 +50,7 @@ pipeline {
             when {
                 anyOf { branch 'develop'; branch "${BRANCH_TO_DEPLOY}" }
             }
+            //noinspection GroovyAssignabilityCheck
             parallel {
                 stage('Prod A') {
                     agent {
@@ -122,6 +124,7 @@ pipeline {
             when {
                 branch 'master'
             }
+            //noinspection GroovyAssignabilityCheck
             parallel {
                 stage('Prod A') {
                     agent {
