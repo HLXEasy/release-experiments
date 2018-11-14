@@ -90,7 +90,9 @@ pipeline {
                                     sh "echo Tag latest not found"
                                     createTag(
                                             user: 'HLXEasy',
-                                            repository: 'release-experiments'
+                                            repository: 'release-experiments',
+                                            name: "This is the tag name",
+                                            description: "Tag description"
                                     )
                                 }
                             }
