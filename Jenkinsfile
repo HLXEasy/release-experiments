@@ -68,7 +68,7 @@ pipeline {
                             }
                             steps {
                                 script {
-                                    sh "echo Tag found"
+                                    sh "echo Tag latest found"
                                 }
                             }
                         }
@@ -85,7 +85,7 @@ pipeline {
                             }
                             steps {
                                 script {
-                                    sh "echo Tag not found"
+                                    sh "echo Tag latest not found"
                                 }
                             }
                         }
@@ -107,14 +107,52 @@ pipeline {
                     agent {
                         label "housekeeping"
                     }
-                    steps {
-                        script {
-                            sh "echo \"Building B (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-B"
-                            uploadArtifactToGitHub(
-                                    user: 'HLXEasy',
-                                    repository: 'release-experiments',
-                                    artifactNameRemote: 'Artifact-B',
-                            )
+                    stages {
+                        stage('Tag exists') {
+                            when {
+                                expression {
+                                    isTagExisting(
+                                            user: 'HLXEasy',
+                                            repository: 'release-experiments',
+                                            tag: 'foo'
+                                    ) == '0'
+                                }
+                            }
+                            steps {
+                                script {
+                                    sh "echo Tag foo found"
+                                }
+                            }
+                        }
+                        stage('Create tag'){
+                            when {
+                                not {
+                                    expression {
+                                        isTagExisting(
+                                                user: 'HLXEasy',
+                                                repository: 'release-experiments',
+                                                tag: 'foo'
+                                        ) == '0'
+                                    }
+                                }
+                            }
+                            steps {
+                                script {
+                                    sh "echo Tag foo not found"
+                                }
+                            }
+                        }
+                        stage('Build') {
+                            steps {
+                                script {
+                                    sh "echo \"Building B (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-B"
+                                    uploadArtifactToGitHub(
+                                            user: 'HLXEasy',
+                                            repository: 'release-experiments',
+                                            artifactNameRemote: 'Artifact-B',
+                                    )
+                                }
+                            }
                         }
                     }
                 }
