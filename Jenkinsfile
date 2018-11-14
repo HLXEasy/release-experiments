@@ -55,18 +55,20 @@ pipeline {
                         label "housekeeping"
                     }
                     stages {
-                        steps {
+                        stage('') {
                             when {
                                 isTagExisting(
                                         user: 'HLXEasy',
                                         repository: 'release-experiments'
                                 )
                             }
-                            script {
-                                sh "echo Tag found"
+                            steps {
+                                script {
+                                    sh "echo Tag found"
+                                }
                             }
                         }
-                        steps {
+                        stage(''){
                             when {
                                 not {
                                     isTagExisting(
@@ -75,18 +77,22 @@ pipeline {
                                     )
                                 }
                             }
-                            script {
-                                sh "echo Tag not found"
+                            steps {
+                                script {
+                                    sh "echo Tag not found"
+                                }
                             }
                         }
-                        steps {
-                            script {
-                                sh "echo \"Building A (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-A"
-                                uploadArtifactToGitHub(
-                                        user: 'HLXEasy',
-                                        repository: 'release-experiments',
-                                        artifactNameRemote: 'Artifact-A',
-                                )
+                        stage('') {
+                            steps {
+                                script {
+                                    sh "echo \"Building A (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-A"
+                                    uploadArtifactToGitHub(
+                                            user: 'HLXEasy',
+                                            repository: 'release-experiments',
+                                            artifactNameRemote: 'Artifact-A',
+                                    )
+                                }
                             }
                         }
                     }
