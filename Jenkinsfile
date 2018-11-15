@@ -167,6 +167,7 @@ pipeline {
                                     uploadArtifactToGitHub(
                                             user: 'HLXEasy',
                                             repository: 'release-experiments',
+                                            tag: 'foo',
                                             artifactNameRemote: 'Artifact-B',
                                     )
                                 }
