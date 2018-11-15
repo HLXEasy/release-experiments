@@ -155,7 +155,8 @@ pipeline {
                                             repository: 'release-experiments',
                                             tag: 'foo',
                                             name: "This is the Release name",
-                                            description: "Release description"
+                                            description: "Release description",
+                                            preRelease: true
                                     )
                                 }
                             }
