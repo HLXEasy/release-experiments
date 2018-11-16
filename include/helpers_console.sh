@@ -6,11 +6,11 @@
 # ----------------------------------------------------------------------------
 
 _init() {
-    if [[ -n "${TERM}" && "${TERM}" != "dumb" ]]; then
+#    if [[ -n "${TERM}" && "${TERM}" != "dumb" ]]; then
         GREEN='\e[0;32m' RED='\e[0;31m' BLUE='\e[0;34m' NORMAL='\e[0m'
-    else
-        GREEN="" RED="" BLUE="" NORMAL=""
-    fi
+#    else
+#        GREEN="" RED="" BLUE="" NORMAL=""
+#    fi
 }
 
 die() {
