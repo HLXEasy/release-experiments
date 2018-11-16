@@ -23,6 +23,16 @@ helpMe() {
     "
 }
 
+getReleaseInfo() {
+    docker run \
+        --rm \
+        -e GITHUB_TOKEN=${GITHUB_TOKEN} \
+        spectreproject/github-uploader:latest \
+        github-release info \
+            --user ${GITHUB_USER} \
+            --repo ${GITHUB_REPOSITORY} | sed -e "1,/releases:/d" | grep -- '- .*, name:' | grep "${GITHUB_TAG}"
+}
+
 ######### HANDLE OPTIONS, CALL MAIN #########
 _init
 GITHUB_DESCRIPTION=''
@@ -58,7 +68,7 @@ case ${OPERATION_TO_DO} in
     edit)
         info "Not yet implemented";;
     info)
-        info "Not yet implemented";;
+        getReleaseInfo;;
     release)
         info "Not yet implemented";;
     upload)
