@@ -52,131 +52,136 @@ pipeline {
             when {
                 anyOf { branch 'develop'; branch "${BRANCH_TO_DEPLOY}" }
             }
-            //noinspection GroovyAssignabilityCheck
-            parallel {
-                stage('Prod A') {
-                    agent {
-                        label "housekeeping"
-                    }
-                    stages {
-                        stage('Remove Release if existing') {
-                            when {
-                                expression {
-                                    return isReleaseExisting(
-                                            user: 'HLXEasy',
-                                            repository: 'release-experiments'
-                                    ) ==~ true
-                                }
-                            }
-                            steps {
-                                script {
-                                    sh "echo Release latest found"
-                                    removeRelease(
-                                            user: 'HLXEasy',
-                                            repository: 'release-experiments'
-                                    )
-                                }
-                            }
-                        }
-                        stage('Create Release'){
-                            when {
-                                expression {
-                                    return isReleaseExisting(
-                                            user: 'HLXEasy',
-                                            repository: 'release-experiments'
-                                    ) ==~ false
-                                }
-                            }
-                            steps {
-                                script {
-                                    sh "echo Release latest not found"
-                                    createRelease(
-                                            user: 'HLXEasy',
-                                            repository: 'release-experiments'
-                                    )
-                                }
-                            }
-                        }
-                        stage('Build') {
-                            steps {
-                                script {
-                                    sh "echo \"Building A (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-A"
-                                    uploadArtifactToGitHub(
-                                            user: 'HLXEasy',
-                                            repository: 'release-experiments',
-                                            artifactNameRemote: 'Artifact-A',
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-                stage('Prod B') {
-                    agent {
-                        label "housekeeping"
-                    }
-                    stages {
-                        stage('Remove Release if existing') {
-                            when {
-                                expression {
-                                    return isReleaseExisting(
-                                            user: 'HLXEasy',
-                                            repository: 'release-experiments',
-                                            tag: 'foo'
-                                    ) ==~ true
-                                }
-                            }
-                            steps {
-                                script {
-                                    sh "echo Release foo found"
-                                    removeRelease(
-                                            user: 'HLXEasy',
-                                            repository: 'release-experiments',
-                                            tag: 'foo'
-                                    )
-                                }
-                            }
-                        }
-                        stage('Create Release'){
-                            when {
-                                expression {
-                                    return isReleaseExisting(
-                                            user: 'HLXEasy',
-                                            repository: 'release-experiments',
-                                            tag: 'foo'
-                                    ) ==~ false
-                                }
-                            }
-                            steps {
-                                script {
-                                    sh "echo Release foo not found"
-                                    createRelease(
-                                            user: 'HLXEasy',
-                                            repository: 'release-experiments',
-                                            tag: 'foo',
-                                            name: "This is the Release name",
-                                            description: "Release description",
-                                            preRelease: true
-                                    )
-                                }
-                            }
-                        }
-                        stage('Build') {
-                            steps {
-                                script {
-                                    sh "echo \"Building B (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-B"
-                                    uploadArtifactToGitHub(
-                                            user: 'HLXEasy',
-                                            repository: 'release-experiments',
-                                            tag: 'foo',
-                                            artifactNameRemote: 'Artifact-B',
-                                    )
-                                }
-                            }
-                        }
-                    }
+            steps {
+                script {
+                    sh "./handleRelease.sh -r release-experiments -u HLXEasy"
                 }
             }
+            //noinspection GroovyAssignabilityCheck
+//            parallel {
+//                stage('Prod A') {
+//                    agent {
+//                        label "housekeeping"
+//                    }
+//                    stages {
+//                        stage('Remove Release if existing') {
+//                            when {
+//                                expression {
+//                                    return isReleaseExisting(
+//                                            user: 'HLXEasy',
+//                                            repository: 'release-experiments'
+//                                    ) ==~ true
+//                                }
+//                            }
+//                            steps {
+//                                script {
+//                                    sh "echo Release latest found"
+//                                    removeRelease(
+//                                            user: 'HLXEasy',
+//                                            repository: 'release-experiments'
+//                                    )
+//                                }
+//                            }
+//                        }
+//                        stage('Create Release'){
+//                            when {
+//                                expression {
+//                                    return isReleaseExisting(
+//                                            user: 'HLXEasy',
+//                                            repository: 'release-experiments'
+//                                    ) ==~ false
+//                                }
+//                            }
+//                            steps {
+//                                script {
+//                                    sh "echo Release latest not found"
+//                                    createRelease(
+//                                            user: 'HLXEasy',
+//                                            repository: 'release-experiments'
+//                                    )
+//                                }
+//                            }
+//                        }
+//                        stage('Build') {
+//                            steps {
+//                                script {
+//                                    sh "echo \"Building A (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-A"
+//                                    uploadArtifactToGitHub(
+//                                            user: 'HLXEasy',
+//                                            repository: 'release-experiments',
+//                                            artifactNameRemote: 'Artifact-A',
+//                                    )
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//                stage('Prod B') {
+//                    agent {
+//                        label "housekeeping"
+//                    }
+//                    stages {
+//                        stage('Remove Release if existing') {
+//                            when {
+//                                expression {
+//                                    return isReleaseExisting(
+//                                            user: 'HLXEasy',
+//                                            repository: 'release-experiments',
+//                                            tag: 'foo'
+//                                    ) ==~ true
+//                                }
+//                            }
+//                            steps {
+//                                script {
+//                                    sh "echo Release foo found"
+//                                    removeRelease(
+//                                            user: 'HLXEasy',
+//                                            repository: 'release-experiments',
+//                                            tag: 'foo'
+//                                    )
+//                                }
+//                            }
+//                        }
+//                        stage('Create Release'){
+//                            when {
+//                                expression {
+//                                    return isReleaseExisting(
+//                                            user: 'HLXEasy',
+//                                            repository: 'release-experiments',
+//                                            tag: 'foo'
+//                                    ) ==~ false
+//                                }
+//                            }
+//                            steps {
+//                                script {
+//                                    sh "echo Release foo not found"
+//                                    createRelease(
+//                                            user: 'HLXEasy',
+//                                            repository: 'release-experiments',
+//                                            tag: 'foo',
+//                                            name: "This is the Release name",
+//                                            description: "Release description",
+//                                            preRelease: true
+//                                    )
+//                                }
+//                            }
+//                        }
+//                        stage('Build') {
+//                            steps {
+//                                script {
+//                                    sh "echo \"Building B (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-B"
+//                                    uploadArtifactToGitHub(
+//                                            user: 'HLXEasy',
+//                                            repository: 'release-experiments',
+//                                            tag: 'foo',
+//                                            artifactNameRemote: 'Artifact-B',
+//                                    )
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
         }
         stage('Master-Branch') {
             when {
