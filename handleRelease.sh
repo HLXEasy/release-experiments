@@ -4,7 +4,7 @@
 #
 #  @author   HLXEasy <helix@spectreproject.io>
 # ----------------------------------------------------------------------------
-
+ set -x
 # Store path from where script was called, determine own location
 # and source helper content from there
 callDir=$(pwd)
