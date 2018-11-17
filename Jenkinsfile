@@ -52,50 +52,50 @@ pipeline {
             when {
                 anyOf { branch 'develop'; branch "${BRANCH_TO_DEPLOY}" }
             }
-            stages('A') {
-                stage {
+            stages {
+                stage('1') {
                     steps {
                         script {
                             sh "./handleRelease.sh -r release-experiments -u HLXEasy"
                         }
                     }
                 }
-                stage {
+                stage('2') {
                     steps {
                         script {
                             sh "sleep 10"
                         }
                     }
                 }
-                stage {
+                stage('3') {
                     steps {
                         script {
                             sh "./handleRelease.sh -r release-experiments -u HLXEasy -o delete -t foo"
                         }
                     }
                 }
-                stage {
+                stage('4') {
                     steps {
                         script {
                             sh "sleep 10"
                         }
                     }
                 }
-                stage {
+                stage('5') {
                     steps {
                         script {
                             sh "./handleRelease.sh -r release-experiments -u HLXEasy -o release -t foo -n 'The release' -d 'The description'"
                         }
                     }
                 }
-                stage {
+                stage('6') {
                     steps {
                         script {
                             sh "sleep 10"
                         }
                     }
                 }
-                stage {
+                stage('7') {
                     steps {
                         script {
                             sh "echo \"Building A (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-A"
