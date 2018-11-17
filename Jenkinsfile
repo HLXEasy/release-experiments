@@ -52,40 +52,56 @@ pipeline {
             when {
                 anyOf { branch 'develop'; branch "${BRANCH_TO_DEPLOY}" }
             }
-            steps {
-                script {
-                    sh "./handleRelease.sh -r release-experiments -u HLXEasy"
+            stages('A') {
+                stage {
+                    steps {
+                        script {
+                            sh "./handleRelease.sh -r release-experiments -u HLXEasy"
+                        }
+                    }
                 }
-            }
-            steps {
-                script {
-                    sh "sleep 10"
+                stage {
+                    steps {
+                        script {
+                            sh "sleep 10"
+                        }
+                    }
                 }
-            }
-            steps {
-                script {
-                    sh "./handleRelease.sh -r release-experiments -u HLXEasy -o delete -t foo"
+                stage {
+                    steps {
+                        script {
+                            sh "./handleRelease.sh -r release-experiments -u HLXEasy -o delete -t foo"
+                        }
+                    }
                 }
-            }
-            steps {
-                script {
-                    sh "sleep 10"
+                stage {
+                    steps {
+                        script {
+                            sh "sleep 10"
+                        }
+                    }
                 }
-            }
-            steps {
-                script {
-                    sh "./handleRelease.sh -r release-experiments -u HLXEasy -o release -t foo -n 'The release' -d 'The description'"
+                stage {
+                    steps {
+                        script {
+                            sh "./handleRelease.sh -r release-experiments -u HLXEasy -o release -t foo -n 'The release' -d 'The description'"
+                        }
+                    }
                 }
-            }
-            steps {
-                script {
-                    sh "sleep 10"
+                stage {
+                    steps {
+                        script {
+                            sh "sleep 10"
+                        }
+                    }
                 }
-            }
-            steps {
-                script {
-                    sh "echo \"Building A (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-A"
-                    sh "./handleRelease.sh -r release-experiments -u HLXEasy -o upload -t foo -a Artifact-A -f TheArtifactA"
+                stage {
+                    steps {
+                        script {
+                            sh "echo \"Building A (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-A"
+                            sh "./handleRelease.sh -r release-experiments -u HLXEasy -o upload -t foo -a Artifact-A -f TheArtifactA"
+                        }
+                    }
                 }
             }
             //noinspection GroovyAssignabilityCheck
