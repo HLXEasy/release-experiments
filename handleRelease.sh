@@ -97,7 +97,7 @@ GITHUB_REPOSITORY=''
 GITHUB_TAG=''
 GITHUB_USER=''
 OPERATION_TO_DO='info'
-WORKSPACE=.
+WORKSPACE=${ownLocation}
 
 rtc=0
 while getopts a:d:f:n:o:pr:t:u:w:h? option; do
