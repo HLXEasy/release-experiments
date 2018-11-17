@@ -94,7 +94,7 @@ GITHUB_USER=''
 OPERATION_TO_DO='info'
 
 rtc=0
-while getopts a:d:f:n:pr:t:u:h? option; do
+while getopts a:d:f:n:o:pr:t:u:h? option; do
     case ${option} in
         a) ARTIFACT_TO_UPLOAD="${OPTARG}";;
         d) GITHUB_DESCRIPTION="${OPTARG}";;
