@@ -56,7 +56,7 @@ pipeline {
                 stage('1') {
                     steps {
                         script {
-                            sh "./handleRelease.sh -r release-experiments -u HLXEasy"
+                            sh "./handleRelease.sh -r release-experiments -u HLXEasy -t foo"
                         }
                     }
                 }
