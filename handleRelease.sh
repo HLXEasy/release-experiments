@@ -75,6 +75,7 @@ uploadArtifactToRelease() {
         --rm \
         -t \
         -e GITHUB_TOKEN=${GITHUB_TOKEN} \
+        -v ${WORKSPACE}:/filesToUpload \
         spectreproject/github-uploader:latest \
         github-release upload \
             --user ${GITHUB_USER} \
@@ -96,9 +97,10 @@ GITHUB_REPOSITORY=''
 GITHUB_TAG=''
 GITHUB_USER=''
 OPERATION_TO_DO='info'
+WORKSPACE=.
 
 rtc=0
-while getopts a:d:f:n:o:pr:t:u:h? option; do
+while getopts a:d:f:n:o:pr:t:u:w:h? option; do
     case ${option} in
         a) ARTIFACT_TO_UPLOAD="${OPTARG}";;
         d) GITHUB_DESCRIPTION="${OPTARG}";;
@@ -109,6 +111,7 @@ while getopts a:d:f:n:o:pr:t:u:h? option; do
         r) GITHUB_REPOSITORY="${OPTARG}";;
         t) GITHUB_TAG="${OPTARG}";;
         u) GITHUB_USER="${OPTARG}";;
+        w) WORKSPACE="${OPTARG}";;
         h|?) helpMe && exit 0;;
         *) die 90 "invalid option \"${OPTARG}\"";;
     esac
