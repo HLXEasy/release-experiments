@@ -24,18 +24,68 @@ helpMe() {
 }
 
 getReleaseInfo() {
+    # See https://stackoverflow.com/questions/7103531/how-to-get-the-part-of-file-after-the-line-that-matches-grep-expression-first
+    # - sed statement to get all content below 'releases:'
+    # - grep to filter first line of each release. They look i. e. like this: "- 2.1.0, name: 'Spectrecoin v2.1.0'..."
+    #   Must be done this way as the whole release notes will be shown here
     docker run \
         --rm \
         -e GITHUB_TOKEN=${GITHUB_TOKEN} \
         spectreproject/github-uploader:latest \
         github-release info \
             --user ${GITHUB_USER} \
-            --repo ${GITHUB_REPOSITORY} | sed -e "1,/releases:/d" | grep -- '- .*, name:' | grep "${GITHUB_TAG}"
+            --repo ${GITHUB_REPOSITORY} | sed -e "1,/releases:/d" | grep -- "- ${GITHUB_TAG}, name: "
+}
+
+removeRelease() {
+    docker run \
+        --rm \
+        -e GITHUB_TOKEN=${GITHUB_TOKEN} \
+        spectreproject/github-uploader:latest \
+        github-release delete \
+            --user ${GITHUB_USER} \
+            --repo ${GITHUB_REPOSITORY} \
+            --tag ${GITHUB_TAG}
+}
+
+createRelease() {
+    if ${GITHUB_PRERELEASE} ; then
+        preReleaseOption='--pre-release'
+    else
+        preReleaseOption=''
+    fi
+    docker run \
+        --rm \
+        -e GITHUB_TOKEN=${GITHUB_TOKEN} \
+        spectreproject/github-uploader:latest \
+        github-release release \
+            --user ${GITHUB_USER} \
+            --repo ${GITHUB_REPOSITORY} \
+            --tag ${GITHUB_TAG} \
+            --name "${GITHUB_NAME}" \
+            --description "${GITHUB_DESCRIPTION}" \
+            ${preReleaseOption}
+}
+
+uploadArtifactToRelease() {
+    docker run \
+        --rm \
+        -e GITHUB_TOKEN=${GITHUB_TOKEN} \
+        spectreproject/github-uploader:latest \
+        github-release upload \
+            --user ${GITHUB_USER} \
+            --repo ${GITHUB_REPOSITORY} \
+            --tag ${GITHUB_TAG} \
+            --name "${GITHUB_FINAL_NAME}" \
+            --file /filesToUpload/${ARTIFACT_TO_UPLOAD} \
+            --replace
 }
 
 ######### HANDLE OPTIONS, CALL MAIN #########
 _init
+ARTIFACT_TO_UPLOAD=''
 GITHUB_DESCRIPTION=''
+GITHUB_FINAL_NAME=''
 GITHUB_NAME=''
 GITHUB_PRERELEASE=false
 GITHUB_REPOSITORY=''
@@ -44,9 +94,11 @@ GITHUB_USER=''
 OPERATION_TO_DO='info'
 
 rtc=0
-while getopts d:n:pr:t:u:h? option; do
+while getopts a:d:f:n:pr:t:u:h? option; do
     case ${option} in
+        a) ARTIFACT_TO_UPLOAD="${OPTARG}";;
         d) GITHUB_DESCRIPTION="${OPTARG}";;
+        f) GITHUB_FINAL_NAME="${OPTARG}";;
         n) GITHUB_NAME="${OPTARG}";;
         o) OPERATION_TO_DO="${OPTARG}";;
         p) GITHUB_PRERELEASE=true;;
@@ -62,7 +114,7 @@ if [[ -z ${GITHUB_TOKEN} ]] ; then die 100 "GITHUB_TOKEN not set on environment!
 
 case ${OPERATION_TO_DO} in
     delete)
-        info "Not yet implemented";;
+        removeRelease;;
     download)
         info "Not yet implemented";;
     edit)
@@ -70,9 +122,9 @@ case ${OPERATION_TO_DO} in
     info)
         getReleaseInfo;;
     release)
-        info "Not yet implemented";;
+        createRelease;;
     upload)
-        info "Not yet implemented";;
+        uploadArtifactToRelease;;
     *)
         die 110 "Unknown github-release option '${OPERATION_TO_DO}'"
 esac
