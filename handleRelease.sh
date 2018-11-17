@@ -30,6 +30,7 @@ getReleaseInfo() {
     #   Must be done this way as the whole release notes will be shown here
     docker run \
         --rm \
+        -it \
         -e GITHUB_TOKEN=${GITHUB_TOKEN} \
         spectreproject/github-uploader:latest \
         github-release info \
@@ -40,6 +41,7 @@ getReleaseInfo() {
 removeRelease() {
     docker run \
         --rm \
+        -it \
         -e GITHUB_TOKEN=${GITHUB_TOKEN} \
         spectreproject/github-uploader:latest \
         github-release delete \
@@ -56,6 +58,7 @@ createRelease() {
     fi
     docker run \
         --rm \
+        -it \
         -e GITHUB_TOKEN=${GITHUB_TOKEN} \
         spectreproject/github-uploader:latest \
         github-release release \
@@ -70,6 +73,7 @@ createRelease() {
 uploadArtifactToRelease() {
     docker run \
         --rm \
+        -it \
         -e GITHUB_TOKEN=${GITHUB_TOKEN} \
         spectreproject/github-uploader:latest \
         github-release upload \
