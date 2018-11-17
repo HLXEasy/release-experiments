@@ -15,7 +15,8 @@ pipeline {
         BRANCH_TO_DEPLOY = 'xyz'
         // This version will be used for the image tags if the branch is merged to master
         BUILDER_IMAGE_VERSION = '1.2'
-        GITHUB_TOKEN = credentials('cdc81429-53c7-4521-81e9-83a7992bca76')
+//        GITHUB_TOKEN = credentials('cdc81429-53c7-4521-81e9-83a7992bca76')
+        GITHUB_TOKEN = credentials('9b5219aa-4d80-4974-82dd-80dab77256e1')
     }
     stages {
         stage('Feature-Branch') {
