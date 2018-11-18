@@ -86,6 +86,27 @@ uploadArtifactToRelease() {
             --replace
 }
 
+updateReleasenotes(){
+    if [[ -z ${GITHUB_NAME} ]] ; then
+        die 110 "Option -n not used"
+    fi
+    if [[ -z ${GITHUB_DESCRIPTION} ]] ; then
+        die 111 "Option -d not used"
+    fi
+
+    docker run \
+        --rm \
+        -t \
+        -e GITHUB_TOKEN=${GITHUB_TOKEN} \
+        spectreproject/github-uploader:latest \
+        github-release edit \
+            --user ${GITHUB_USER} \
+            --repo ${GITHUB_REPOSITORY} \
+            --tag ${GITHUB_TAG} \
+            --name "${GITHUB_NAME}" \
+            --description "${GITHUB_DESCRIPTION}"
+}
+
 ######### HANDLE OPTIONS, CALL MAIN #########
 _init
 ARTIFACT_TO_UPLOAD=''
@@ -125,7 +146,7 @@ case ${OPERATION_TO_DO} in
     download)
         info "Not yet implemented";;
     edit)
-        info "Not yet implemented";;
+        updateReleasenotes;;
     info)
         getReleaseInfo;;
     release)
