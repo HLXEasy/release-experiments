@@ -203,6 +203,7 @@ pipeline {
                             steps {
                                 script {
                                     sh "echo Release foo not found"
+                                    sh "sleep 10"
                                     createRelease(
                                             user: 'HLXEasy',
                                             repository: 'release-experiments',
