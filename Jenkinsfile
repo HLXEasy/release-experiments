@@ -242,10 +242,9 @@ pipeline {
                                 }
                             }
                         }
-                        stage('Create Release'){
+                        stage('1st update of release'){
                             steps {
                                 script {
-                                    sh "1st update of release"
                                     sh "sleep 10"
                                     updateRelease(
                                             user: 'HLXEasy',
@@ -258,10 +257,9 @@ pipeline {
                                 }
                             }
                         }
-                        stage('Create Release'){
+                        stage('2nd update of release'){
                             steps {
                                 script {
-                                    sh "2nd update of release"
                                     sh "sleep 10"
                                     updateRelease(
                                             user: 'HLXEasy',
