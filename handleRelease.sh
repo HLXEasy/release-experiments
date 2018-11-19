@@ -51,23 +51,43 @@ removeRelease() {
 }
 
 createRelease() {
+    checkRequirements
+
     if ${GITHUB_PRERELEASE} ; then
         preReleaseOption='--pre-release'
     else
         preReleaseOption=''
     fi
-    docker run \
-        --rm \
-        -t \
-        -e GITHUB_TOKEN=${GITHUB_TOKEN} \
-        spectreproject/github-uploader:latest \
-        github-release release \
-            --user ${GITHUB_USER} \
-            --repo ${GITHUB_REPOSITORY} \
-            --tag ${GITHUB_TAG} \
-            --name "${GITHUB_NAME}" \
-            --description "${GITHUB_DESCRIPTION}" \
-            ${preReleaseOption}
+
+    # Check if ${GITHUB_DESCRIPTION} is a file and if yes,
+    # use it's content for the release description
+    if [[ -e ${GITHUB_DESCRIPTION} ]] ; then
+        docker run \
+            --rm \
+            -t \
+            -e GITHUB_TOKEN=${GITHUB_TOKEN} \
+            spectreproject/github-uploader:latest \
+            github-release release \
+                --user ${GITHUB_USER} \
+                --repo ${GITHUB_REPOSITORY} \
+                --tag ${GITHUB_TAG} \
+                --name "${GITHUB_NAME}" \
+                --description "$(cat ${GITHUB_DESCRIPTION})" \
+                ${preReleaseOption}
+    else
+        docker run \
+            --rm \
+            -t \
+            -e GITHUB_TOKEN=${GITHUB_TOKEN} \
+            spectreproject/github-uploader:latest \
+            github-release release \
+                --user ${GITHUB_USER} \
+                --repo ${GITHUB_REPOSITORY} \
+                --tag ${GITHUB_TAG} \
+                --name "${GITHUB_NAME}" \
+                --description "${GITHUB_DESCRIPTION}" \
+                ${preReleaseOption}
+    fi
 }
 
 uploadArtifactToRelease() {
@@ -86,28 +106,23 @@ uploadArtifactToRelease() {
             --replace
 }
 
-updateReleasenotes(){
-    if [[ -z ${GITHUB_NAME} ]] ; then
-        die 110 "Option -n not used"
-    fi
-    if [[ -z ${GITHUB_DESCRIPTION} ]] ; then
-        die 111 "Option -d not used"
-    fi
+updateReleasenotes() {
+    checkRequirements
 
+    # Check if ${GITHUB_DESCRIPTION} is a file and if yes,
+    # use it's content for the release description
     if [[ -e ${GITHUB_DESCRIPTION} ]] ; then
-        cat ${GITHUB_DESCRIPTION} |
-            docker run \
-                --rm \
-                -t \
-                -e GITHUB_TOKEN=${GITHUB_TOKEN} \
-                spectreproject/github-uploader:latest \
-                github-release edit \
-                    --user ${GITHUB_USER} \
-                    --repo ${GITHUB_REPOSITORY} \
-                    --tag ${GITHUB_TAG} \
-                    --name "${GITHUB_NAME}" \
-                    --description -
-        exec <&-
+        docker run \
+            --rm \
+            -t \
+            -e GITHUB_TOKEN=${GITHUB_TOKEN} \
+            spectreproject/github-uploader:latest \
+            github-release edit \
+                --user ${GITHUB_USER} \
+                --repo ${GITHUB_REPOSITORY} \
+                --tag ${GITHUB_TAG} \
+                --name "${GITHUB_NAME}" \
+                --description "$(cat ${GITHUB_DESCRIPTION})"
     else
         docker run \
             --rm \
@@ -120,6 +135,15 @@ updateReleasenotes(){
                 --tag ${GITHUB_TAG} \
                 --name "${GITHUB_NAME}" \
                 --description "${GITHUB_DESCRIPTION}"
+    fi
+}
+
+checkRequirements(){
+    if [[ -z ${GITHUB_NAME} ]] ; then
+        die 110 "Option -n not used"
+    fi
+    if [[ -z ${GITHUB_DESCRIPTION} ]] ; then
+        die 111 "Option -d not used"
     fi
 }
 
