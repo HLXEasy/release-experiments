@@ -94,17 +94,32 @@ updateReleasenotes(){
         die 111 "Option -d not used"
     fi
 
-    docker run \
-        --rm \
-        -t \
-        -e GITHUB_TOKEN=${GITHUB_TOKEN} \
-        spectreproject/github-uploader:latest \
-        github-release edit \
-            --user ${GITHUB_USER} \
-            --repo ${GITHUB_REPOSITORY} \
-            --tag ${GITHUB_TAG} \
-            --name "${GITHUB_NAME}" \
-            --description "${GITHUB_DESCRIPTION}"
+    if [[ -e ${GITHUB_DESCRIPTION} ]] ; then
+        cat ${GITHUB_DESCRIPTION} |
+            docker run \
+                --rm \
+                -t \
+                -e GITHUB_TOKEN=${GITHUB_TOKEN} \
+                spectreproject/github-uploader:latest \
+                github-release edit \
+                    --user ${GITHUB_USER} \
+                    --repo ${GITHUB_REPOSITORY} \
+                    --tag ${GITHUB_TAG} \
+                    --name "${GITHUB_NAME}" \
+                    --description -
+    else
+        docker run \
+            --rm \
+            -t \
+            -e GITHUB_TOKEN=${GITHUB_TOKEN} \
+            spectreproject/github-uploader:latest \
+            github-release edit \
+                --user ${GITHUB_USER} \
+                --repo ${GITHUB_REPOSITORY} \
+                --tag ${GITHUB_TAG} \
+                --name "${GITHUB_NAME}" \
+                --description "${GITHUB_DESCRIPTION}"
+    fi
 }
 
 ######### HANDLE OPTIONS, CALL MAIN #########
