@@ -266,7 +266,7 @@ pipeline {
                                             repository: 'release-experiments',
                                             tag: 'foo',
                                             name: "This is the Release from ${BUILD_NUMBER}",
-                                            description: "ReleaseNotes.md",
+                                            description: "${WORKSPACE}/ReleaseNotes.md",
                                             preRelease: true
                                     )
                                 }
