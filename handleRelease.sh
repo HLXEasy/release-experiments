@@ -107,6 +107,7 @@ updateReleasenotes(){
                     --tag ${GITHUB_TAG} \
                     --name "${GITHUB_NAME}" \
                     --description -
+        exec <&-
     else
         docker run \
             --rm \
