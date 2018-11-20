@@ -50,7 +50,7 @@ pipeline {
                 }
             }
         }
-        stage('Develop-Branch') {
+        stage('Git tag handling') {
             when {
                 anyOf { branch 'develop'; branch "${BRANCH_TO_DEPLOY}" }
             }
