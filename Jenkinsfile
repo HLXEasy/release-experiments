@@ -17,6 +17,7 @@ pipeline {
         BUILDER_IMAGE_VERSION = '1.2'
 //        GITHUB_TOKEN = credentials('cdc81429-53c7-4521-81e9-83a7992bca76')
         GITHUB_TOKEN = credentials('9b5219aa-4d80-4974-82dd-80dab77256e1')
+        GIT_TAG_TO_CREATE = "Build${BUILD_NUMBER}"
     }
     stages {
         stage('Feature-Branch') {
@@ -46,6 +47,20 @@ pipeline {
                             sh "echo \"Building B (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-B"
                         }
                     }
+                }
+            }
+        }
+        stage('Develop-Branch') {
+            when {
+                anyOf { branch 'develop'; branch "${BRANCH_TO_DEPLOY}" }
+            }
+            stages {
+                stage('Create tag') {
+                    createTag(
+                            tag: "${GIT_TAG_TO_CREATE}",
+                            commit: "HEAD",
+                            comment: "Created tag ${GIT_TAG_TO_CREATE}"
+                    )
                 }
             }
         }
@@ -189,7 +204,7 @@ pipeline {
                                     return isReleaseExisting(
                                             user: 'HLXEasy',
                                             repository: 'release-experiments',
-                                            tag: 'foo'
+                                            tag: "${GIT_TAG_TO_CREATE}"
                                     ) ==~ true
                                 }
                             }
@@ -199,7 +214,7 @@ pipeline {
                                     removeRelease(
                                             user: 'HLXEasy',
                                             repository: 'release-experiments',
-                                            tag: 'foo'
+                                            tag: "${GIT_TAG_TO_CREATE}"
                                     )
                                 }
                             }
@@ -210,7 +225,7 @@ pipeline {
                                     return isReleaseExisting(
                                             user: 'HLXEasy',
                                             repository: 'release-experiments',
-                                            tag: 'foo'
+                                            tag: "${GIT_TAG_TO_CREATE}"
                                     ) ==~ false
                                 }
                             }
@@ -221,7 +236,7 @@ pipeline {
                                     createRelease(
                                             user: 'HLXEasy',
                                             repository: 'release-experiments',
-                                            tag: 'foo',
+                                            tag: "${GIT_TAG_TO_CREATE}",
                                             name: "This is the Release name",
                                             description: "Release description",
                                             preRelease: true
@@ -236,7 +251,7 @@ pipeline {
                                     uploadArtifactToGitHub(
                                             user: 'HLXEasy',
                                             repository: 'release-experiments',
-                                            tag: 'foo',
+                                            tag: "${GIT_TAG_TO_CREATE}",
                                             artifactNameRemote: 'Artifact-B',
                                     )
                                 }
@@ -249,7 +264,7 @@ pipeline {
                                     updateRelease(
                                             user: 'HLXEasy',
                                             repository: 'release-experiments',
-                                            tag: 'foo',
+                                            tag: "${GIT_TAG_TO_CREATE}",
                                             name: "This is the Release name",
                                             description: "Release description",
                                             preRelease: false
@@ -264,7 +279,7 @@ pipeline {
                                     updateRelease(
                                             user: 'HLXEasy',
                                             repository: 'release-experiments',
-                                            tag: 'foo',
+                                            tag: "${GIT_TAG_TO_CREATE}",
                                             name: "This is the Release from ${BUILD_NUMBER}",
                                             description: "${WORKSPACE}/ReleaseNotes.md",
                                             preRelease: true
