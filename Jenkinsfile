@@ -74,7 +74,7 @@ pipeline {
 //                stage('1') {
 //                    steps {
 //                        script {
-//                            sh "./handleRelease.sh -r release-experiments -u HLXEasy -t foo"
+//                            sh "./handleRelease.sh -r release-experiments -u spectrecoin -t foo"
 //                        }
 //                    }
 //                }
@@ -88,7 +88,7 @@ pipeline {
 //                stage('3') {
 //                    steps {
 //                        script {
-//                            sh "./handleRelease.sh -r release-experiments -u HLXEasy -o delete -t foo"
+//                            sh "./handleRelease.sh -r release-experiments -u spectrecoin -o delete -t foo"
 //                        }
 //                    }
 //                }
@@ -102,7 +102,7 @@ pipeline {
 //                stage('5') {
 //                    steps {
 //                        script {
-//                            sh "./handleRelease.sh -r release-experiments -u HLXEasy -o release -t foo -n 'The release' -d 'The description'"
+//                            sh "./handleRelease.sh -r release-experiments -u spectrecoin -o release -t foo -n 'The release' -d 'The description'"
 //                        }
 //                    }
 //                }
@@ -117,7 +117,7 @@ pipeline {
 //                    steps {
 //                        script {
 //                            sh "echo \"Building A (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-A"
-//                            sh "./handleRelease.sh -r release-experiments -u HLXEasy -o upload -t foo -a Artifact-A -f TheArtifactA"
+//                            sh "./handleRelease.sh -r release-experiments -u spectrecoin -o upload -t foo -a Artifact-A -f TheArtifactA"
 //                        }
 //                    }
 //                }
@@ -131,7 +131,7 @@ pipeline {
 //                stage('9') {
 //                    steps {
 //                        script {
-//                            sh './handleRelease.sh -r release-experiments -u HLXEasy -o edit -t foo -n "The release with release notes" -d "ReleaseNotes.md"'
+//                            sh './handleRelease.sh -r release-experiments -u spectrecoin -o edit -t foo -n "The release with release notes" -d "ReleaseNotes.md"'
 //                        }
 //                    }
 //                }
@@ -147,7 +147,7 @@ pipeline {
                             when {
                                 expression {
                                     return isReleaseExisting(
-                                            user: 'HLXEasy',
+                                            user: 'spectrecoin',
                                             repository: 'release-experiments'
                                     ) ==~ true
                                 }
@@ -156,7 +156,7 @@ pipeline {
                                 script {
                                     sh "echo Release latest found"
                                     removeRelease(
-                                            user: 'HLXEasy',
+                                            user: 'spectrecoin',
                                             repository: 'release-experiments'
                                     )
                                 }
@@ -166,7 +166,7 @@ pipeline {
                             when {
                                 expression {
                                     return isReleaseExisting(
-                                            user: 'HLXEasy',
+                                            user: 'spectrecoin',
                                             repository: 'release-experiments'
                                     ) ==~ false
                                 }
@@ -175,7 +175,7 @@ pipeline {
                                 script {
                                     sh "echo Release latest not found"
                                     createRelease(
-                                            user: 'HLXEasy',
+                                            user: 'spectrecoin',
                                             repository: 'release-experiments'
                                     )
                                 }
@@ -186,7 +186,7 @@ pipeline {
                                 script {
                                     sh "echo \"Building A (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-A"
                                     uploadArtifactToGitHub(
-                                            user: 'HLXEasy',
+                                            user: 'spectrecoin',
                                             repository: 'release-experiments',
                                             artifactNameRemote: 'Artifact-A',
                                     )
@@ -204,7 +204,7 @@ pipeline {
                             when {
                                 expression {
                                     return isReleaseExisting(
-                                            user: 'HLXEasy',
+                                            user: 'spectrecoin',
                                             repository: 'release-experiments',
                                             tag: "${GIT_TAG_TO_CREATE}"
                                     ) ==~ true
@@ -214,7 +214,7 @@ pipeline {
                                 script {
                                     sh "echo Release foo found"
                                     removeRelease(
-                                            user: 'HLXEasy',
+                                            user: 'spectrecoin',
                                             repository: 'release-experiments',
                                             tag: "${GIT_TAG_TO_CREATE}"
                                     )
@@ -225,7 +225,7 @@ pipeline {
                             when {
                                 expression {
                                     return isReleaseExisting(
-                                            user: 'HLXEasy',
+                                            user: 'spectrecoin',
                                             repository: 'release-experiments',
                                             tag: "${GIT_TAG_TO_CREATE}"
                                     ) ==~ false
@@ -236,7 +236,7 @@ pipeline {
                                     sh "echo Release foo not found"
                                     sh "sleep 10"
                                     createRelease(
-                                            user: 'HLXEasy',
+                                            user: 'spectrecoin',
                                             repository: 'release-experiments',
                                             tag: "${GIT_TAG_TO_CREATE}",
                                             name: "This is the Release name",
@@ -251,7 +251,7 @@ pipeline {
                                 script {
                                     sh "echo \"Building B (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-B"
                                     uploadArtifactToGitHub(
-                                            user: 'HLXEasy',
+                                            user: 'spectrecoin',
                                             repository: 'release-experiments',
                                             tag: "${GIT_TAG_TO_CREATE}",
                                             artifactNameRemote: 'Artifact-B',
@@ -264,7 +264,7 @@ pipeline {
                                 script {
                                     sh "sleep 10"
                                     updateRelease(
-                                            user: 'HLXEasy',
+                                            user: 'spectrecoin',
                                             repository: 'release-experiments',
                                             tag: "${GIT_TAG_TO_CREATE}",
                                             name: "This is the Release name",
@@ -279,7 +279,7 @@ pipeline {
                                 script {
                                     sh "sleep 10"
                                     updateRelease(
-                                            user: 'HLXEasy',
+                                            user: 'spectrecoin',
                                             repository: 'release-experiments',
                                             tag: "${GIT_TAG_TO_CREATE}",
                                             name: "This is the Release from ${BUILD_NUMBER}",
@@ -307,7 +307,7 @@ pipeline {
                         script {
                             sh "echo \"Building A (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-A"
                             uploadArtifactToGitHub(
-                                    user: 'HLXEasy',
+                                    user: 'spectrecoin',
                                     repository: 'release-experiments',
                                     tag: 'latest',
                                     artifactNameLocal: 'Artifact-A',
@@ -324,7 +324,7 @@ pipeline {
                         script {
                             sh "echo \"Building B (TimeStamp: ${currentBuild.startTimeInMillis})\" | tee Artifact-B"
                             uploadArtifactToGitHub(
-                                    user: 'HLXEasy',
+                                    user: 'spectrecoin',
                                     repository: 'release-experiments',
                                     tag: 'latest',
                                     artifactNameLocal: 'Artifact-B',
