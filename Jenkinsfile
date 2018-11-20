@@ -56,11 +56,13 @@ pipeline {
             }
             stages {
                 stage('Create tag') {
-                    createTag(
-                            tag: "${GIT_TAG_TO_CREATE}",
-                            commit: "HEAD",
-                            comment: "Created tag ${GIT_TAG_TO_CREATE}"
-                    )
+                    steps {
+                        createTag(
+                                tag: "${GIT_TAG_TO_CREATE}",
+                                commit: "HEAD",
+                                comment: "Created tag ${GIT_TAG_TO_CREATE}"
+                        )
+                    }
                 }
             }
         }
